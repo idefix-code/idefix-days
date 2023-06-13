@@ -7,3 +7,4 @@ dependencies:
   - pooch>=0.7.0
   - pandas>=1.1.2
   - jupyterlab>=4.0.2
+  - h5py>=3.8.0
