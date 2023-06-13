@@ -1,0 +1,9 @@
+# keep in sync with requirements.txt
+name: yt_intro
+channels:
+  - conda-forge
+dependencies:
+  - yt>=4.2.0
+  - pooch>=0.7.0
+  - pandas>=1.1.2
+  - jupyterlab>=4.0.2

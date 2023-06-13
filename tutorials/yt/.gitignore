@@ -1,0 +1,5 @@
+# temporary storage dir
+yt_download_cache
+
+# data files
+IsolatedGalaxy/*
