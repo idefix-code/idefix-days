@@ -2,4 +2,4 @@
 # slightly alter yt's default configuration
 colored_logs = true
 log_level = 30 # only show log messages with levels >=WARNING
-test_data_dir = "."
+test_data_dir = "yt_data"
