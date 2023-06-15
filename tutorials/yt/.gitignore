@@ -1,5 +1,4 @@
-# temporary storage dir
+# temporary storage
 yt_download_cache
-
 # data files
-IsolatedGalaxy/*
+yt_data
