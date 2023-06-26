@@ -1,6 +1,7 @@
 #include <algorithm>
 #include "idefix.hpp"
 #include "setup.hpp"
+#include "soundspeed.hpp"
 
 real sigma0Glob;
 real sigmaSlopeGlob;
@@ -10,32 +11,13 @@ real HidealGlob;
 real AmMidGlob;
 real gammaGlob;
 real densityFloorGlob;
-real alphaGlob;
+
+SoundSpeed *ss;
 
 
 void MySoundSpeed(DataBlock &data, const real t, IdefixArray3D<real> &cs) {
-  IdefixArray1D<real> x1=data.x[IDIR];
-  real h0 = h0Glob;
-  idefix_for("MySoundSpeed",0,data.np_tot[KDIR],0,data.np_tot[JDIR],0,data.np_tot[IDIR],
-              KOKKOS_LAMBDA (int k, int j, int i) {
-                real R = x1(i);
-                cs(k,j,i) = h0/sqrt(R);
-              });
-}
-
-void MyViscosity(DataBlock &data, const real t, IdefixArray3D<real> &eta1, IdefixArray3D<real> &eta2) {
-  IdefixArray4D<real> Vc=data.hydro->Vc;
-  IdefixArray1D<real> x1=data.x[IDIR];
-  real h0 = h0Glob;
-  real alpha = alphaGlob;
-  idefix_for("MyViscosity",0,data.np_tot[KDIR],0,data.np_tot[JDIR],0,data.np_tot[IDIR],
-              KOKKOS_LAMBDA (int k, int j, int i) {
-                real R = x1(i);
-                real cs = h0/sqrt(R);
-                eta1(k,j,i) = alpha*cs*h0*R*Vc(RHO,k,j,i);
-                eta2(k,j,i) = ZERO_F;
-              });
-
+  // Call our class
+  ss->Compute(cs);
 }
 
 // User-defined boundaries
@@ -107,13 +89,18 @@ Setup::Setup(Input &input, Grid &grid, DataBlock &data, Output &output)// : m_pl
   // Set the function for userdefboundary
   data.hydro->EnrollUserDefBoundary(&UserdefBoundary);
   data.hydro->EnrollIsoSoundSpeed(&MySoundSpeed);
-  data.hydro->viscosity->EnrollViscousDiffusivity(&MyViscosity);
   if(data.haveFargo)
     data.fargo->EnrollVelocity(&FargoVelocity);
   sigma0Glob = input.Get<real>("Setup","sigma0",0);
   sigmaSlopeGlob = input.Get<real>("Setup","sigmaSlope",0);
   h0Glob = input.Get<real>("Setup","h0",0);
+  ss = new SoundSpeed(input, data);
 
+}
+
+// Destructor
+Setup::~Setup() {
+  delete ss;
 }
 
 // This routine initialize the flow
