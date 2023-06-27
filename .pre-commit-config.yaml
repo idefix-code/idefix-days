@@ -13,6 +13,11 @@ repos:
     - id: check-executables-have-shebangs
     - id: check-yaml
 
+-   repo: https://github.com/codespell-project/codespell
+    rev: v2.2.4
+    hooks:
+    - id: codespell
+
 -   repo: https://github.com/psf/black
     rev: 23.3.0
     hooks:
