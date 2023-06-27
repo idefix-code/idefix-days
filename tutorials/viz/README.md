@@ -1,14 +1,15 @@
-# Data analysis with Python (yt and nonos)
+# Data vizualisation with Python (yt and nonos)
 
 These tutorials require Python 3.8 or newer.
 
-Both tutorials include environment files. It is strongly advised to create virtual
+Both tutorials include requirement files. It is strongly advised to create virtual
 environments before installing anything specifically for these tutorials. To get
 started, navigate to a tutorial's subdirectory and create a virtual environment ...
 
 ## with conda
 ```shell
-$ conda create --name=<name> --file=environment.yaml
+$ conda config --add channels conda-forge
+$ conda create --name=<name> --file=requirements.txt python=3.10
 $ conda activate <name>
 ```
 
