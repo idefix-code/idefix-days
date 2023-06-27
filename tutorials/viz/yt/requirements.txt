@@ -1,4 +1,3 @@
-# keep in sync with environment.yaml
 yt>=4.2.0
 pooch>=0.7.0
 pandas>=1.1.2
