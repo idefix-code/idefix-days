@@ -1,4 +1,4 @@
-# Data vizualisation with Python (yt and nonos): pre-requisites
+# Data visualization with Python (yt and nonos): pre-requisites
 
 These tutorials require Python 3.8 or newer.
 
