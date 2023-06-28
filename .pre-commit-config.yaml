@@ -55,4 +55,4 @@ repos:
   rev: v1.1.2
   hooks:
   - id: markdown-toc
-    files: tutorials/git/README.md
+    files: README.md
