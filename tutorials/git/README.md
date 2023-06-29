@@ -1,10 +1,52 @@
-# git-tutorial
-intro to git as a static markdown page
+# Git for Idefix
 
+<!-- toc -->
+
+- [General introduction](#general-introduction)
+  * [Scope](#scope)
+    + [Additional resources](#additional-resources)
+  * [What is `git` ?](#what-is-git-)
+  * [When do you need it ?](#when-do-you-need-it-)
+  * [git command line interface (CLI)](#git-command-line-interface-cli)
+- [Hands-on tutorial to the `git` command line](#hands-on-tutorial-to-the-git-command-line)
+  * [Requirements](#requirements)
+  * [Additional recommendations](#additional-recommendations)
+  * [Getting started (first commits)](#getting-started-first-commits)
+    + [Modifying files that are already tracked](#modifying-files-that-are-already-tracked)
+  * [Going back in time](#going-back-in-time)
+  * [Using a remote reference](#using-a-remote-reference)
+    + [Definitions](#definitions)
+    + [Setting up your project on GitHub](#setting-up-your-project-on-github)
+  * [Using branches](#using-branches)
+    + [Introdution to branches](#introdution-to-branches)
+    + [Creating a new branch](#creating-a-new-branch)
+    + [Merging back](#merging-back)
+- [Practical development](#practical-development)
+  * [Pre-requisites](#pre-requisites)
+  * [GitHub Issues](#github-issues)
+    + [Before you report](#before-you-report)
+    + [Bug report good practices](#bug-report-good-practices)
+  * [Contributing a patch](#contributing-a-patch)
+    + [Fork it](#fork-it)
+    + [Clone it](#clone-it)
+    + [Branch it](#branch-it)
+    + [Patch it](#patch-it)
+    + [Push it](#push-it)
+    + [Open a Pull Request](#open-a-pull-request)
+  * [automated validation (continuous integration)](#automated-validation-continuous-integration)
+    + [lint](#lint)
+    + [tests (Continuous Integration (CI))](#tests-continuous-integration-ci)
+  * [Reviews](#reviews)
+
+<!-- tocstop -->
+
+# General introduction
 
 ## Scope
-This is a simple introduction to `git`.
-In this document, you will learn the fundamentals of version-control, and we'll cover the following skills
+
+This document is an introduction the `git` command line, for `idefix`, comprised of two
+parts. In the first one we'll cover the fundamentals of version-control and branching
+workflows.
 
 - create and setup a git project (`git init`)
 - add and remove files (`git add`, `git rm`)
@@ -15,19 +57,22 @@ In this document, you will learn the fundamentals of version-control, and we'll 
 - resolve history conflict
 - visualize the current state (`git status`, `git diff`, `git branch`)
 
-Of course, mastering `git` goes well beyond the scope of the present document.
-In particular, the following topics will *not* be covered, but are no less important:
 
-- collaboration (sharing a project with other persons)
-- editing the history (`git rebase`)
-- bisecting the history to look for bugs (`git bisect`)
+In the second part, we'll discuss practical aspects of collaborating on GitHub for a
+project like `idefix`.
 
+- bug reports (issues)
+- contributing patches (pull requests) reviewing
+- continuous integration (CI for shorts) (lint and tests)
 
-## Additional resources
+Mastering `git` goes well beyond the scope of the present document.
+In particular,  history rewriting (`git rebase`) and history inspection (`git bisect`)
+are considered *advanced*, and will not be covered here. They should not however be
+considered *esoteric*, and consistute very powerful tools for the initiated.
+
+### Additional resources
 [Interactive git sandbox](https://git-school.github.io/visualizing-git/)
-
-
-# Introduction
+[Talking to people (PyCon 2023 Keynote)](https://www.youtube.com/watch?v=n5QaOADqSyY)
 
 ## What is `git` ?
 
@@ -57,7 +102,7 @@ This drastically decreases the cost of making mistakes and breaking things, beca
 
 ## When do you need it ?
 
-`git` is useful for any project you work on today and will still care about tommorow. It could be some source code, but it can also be a **paper manuscript**.
+`git` is useful for any project you work on today and will still care about tomorow. It could be some source code, but it can also be a **paper manuscript**.
 This website itself is backed-up with `git`.
 
 
@@ -75,7 +120,7 @@ I strongly recommend *sticking* to the CLI after you've mastered the basics,
 because it is by far the most portable way to use git: it is the only one
 available everywhere.
 
-# Hands-on tutorial
+# Hands-on tutorial to the `git` command line
 
 
 ## Requirements
@@ -102,7 +147,7 @@ For instance this is how you'd set `nano`
 $ git config --global core.editor nano
 ```
 This is because some advanced sub-commands require an editor, and its preferable
-to know that you are confortable with the one you get (otherwise it may default
+to know that you are comfortable with the one you get (otherwise it may default
 to `vi`, which is infamously hard to exit when you've never used it).
 
 It it recommended that to sign up on GitHub.
@@ -110,7 +155,7 @@ It it recommended that to sign up on GitHub.
 ## Getting started (first commits)
 
 >    In this section we will create a dummy project *from scratch*. You can use an
->    actual project of yours instead if you feel confortable to.
+>    actual project of yours instead if you feel comfortable to.
 
 
 
@@ -185,7 +230,7 @@ Changes to be committed:
 ```
 </details>
 
-We see that `README.txt` is now being *tracked* by the system, but it is not *commited* yet, meaning we haven't created an actual *version* (or *commit*, from now on) in the history. So let's do just that
+We see that `README.txt` is now being *tracked* by the system, but it is not *committed* yet, meaning we haven't created an actual *version* (or *commit*, from now on) in the history. So let's do just that
 
 ```
 $ git commit -m "Add README.txt"
@@ -229,7 +274,7 @@ There we see all our most recent commits (just one in this case).
 
 
 >    In addition to the rest of our metadata (author, date, commit message), each commit is uniquely identified by a [hash](https://en.wikipedia.org/wiki/Secure_Hash_Algorithms)
->    (`956206c5db49848047ef45161ed9e457dcb5f9a8` in the example above). This is an alpha-numeric string
+>    (`956206c5db49848047ef45161ed9e457dcb5f9a8` in the example above). This is an alphanumeric string
 >    that is generated by a deterministic but chaotic algorithm, which outputs are *very likely* to be unique
 >    within a project.
 
@@ -237,9 +282,9 @@ There we see all our most recent commits (just one in this case).
 
 ### Modifying files that are already tracked
 
-Let's mofify a file and check how it affect `git status`
+Let's modify a file and check how it affect `git status`
 ```
-$ echo "mofification" >> README.txt
+$ echo "modification" >> README.txt
 $ git status
 On branch main
 Untracked files:
@@ -372,7 +417,7 @@ It should be clear that as long as only one person contributes to the project fr
 
 However, pushing directly to the reference branch (`main` here, sometimes `master`) on a shared reference will work when working with colleagues and/or multiple machines, because histories could very easily diverge and clash.
 In order to avoid this situation, we can forbid that anyone pushes changes directly to the `main` branch.
-With this new rule, your local copy of the `main` branch will in general be behind the remote copy (some commits will exists on the remote that do not exist on your local copy). We can schematize this situtation as follow
+With this new rule, your local copy of the `main` branch will in general be behind the remote copy (some commits will exists on the remote that do not exist on your local copy). We can schematize this situation as follow
 
 Our local copy (clone) has the following history
 ```mermaid
@@ -509,3 +554,237 @@ $ git checkout main
 $ git pull
 $ git merge --no-ff feature
 ```
+
+
+
+
+# Practical development
+
+This section covers **technicalities** of collaboration and attempts to summarize
+important aspects of efficient communication around a code project. However please keep
+in mind that `idefix`, as all things, is developed for **people** by **people**. This
+means that developers (and yourself) may have (diverging ?) **opinions**, so being
+[**technically** correct](https://knowyourmeme.com/photos/909991-futurama) may not
+always be sufficient to push an idea forward.
+
+This is a whole other topic but in brief: please be nice to each other.
+(nice: humble, patient, sympathetic, actively encouraging, inclusive, respectful)
+
+## Pre-requisites
+
+In the following, I'll assume you have signed up to GitHub and are able to login.
+I also recommend [setting up your account for ssh](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+(this will save you the trouble
+of entering your password every time you interact with GitHub).
+
+## GitHub Issues
+
+GitHub includes an *issue tracker*. *Issues* are development related discussion
+threads that are:
+- public
+- searchable
+- lasting
+
+making them much better than private Slack conversations (but of course this never happened).
+
+Most of the time, they are used to report *bugs*. I'll include the first line from
+[the wiki page](https://en.wikipedia.org/wiki/Software_bug)
+
+> A software bug is an error, flaw or fault in the design, development, or operation of computer software that causes it to produce an incorrect or unexpected result, or to behave in unintended ways.
+
+Note that this includes *but isn't limited to* runtime crashes !
+
+Issues themselves are not limited to bug reports. They can also be used to propose and
+discuss new features.
+
+[Creating an issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue)
+
+
+### Before you report
+
+- search the issue tracker: has your problem been reported yet ?
+- try updating idefix and see if the problem persists.
+
+
+### Bug report good practices
+
+When reporting a bug, it's important to be explicit and comprehensive.
+
+> A bug is like a crime scene: every detail is potentially a decisive clue.
+
+Your readers are much more likely to provide adequate help if they are able to
+*reproduce* the problem you're having.
+
+Be sure to include as much relevant details as possible. For instance
+- what version (tag, branch, or hash) of idefix are you working with ?
+- what implementation of MPI (and which version) ?
+- if you updated the Kokkos submodule, what version are you at ? (also please tell us why)
+- what machine/architecture are you working on ?
+- include the exact (and complete !) error message (maybe even a full log)
+- ...
+
+In short, **provide the detective (reader) with as many clues as you can**. When in
+doubt, prefer sharing too much than too little.
+
+## Contributing a patch
+
+> A *patch* may be a *(bug)fix* or a new *feature*.
+
+We'll review the steps towards contributing a patch. Following the whole procedure can
+be a little overwhelming, but note that most of the steps are only needed the first time
+you do it, so it's much simpler the second time. The process is also identical for many
+open source projects !
+
+### Fork it
+Because you don't have commit-rights on the `idefix-code` repository, you'll need to
+*fork* it. This means creating a copy that *belongs to you*, which will allow you to
+create branches !
+
+![fork](img/Screenshot-fork.png)
+
+
+### Clone it
+*clone your fork* (i.e. create a local copy of your remote fork)
+(see the "code" button)
+
+![clone](img/Screenshot-clone.png)
+
+```shell
+$ git clone git@github.com:<USER>/idefix.git
+```
+
+### Branch it
+
+```shell
+$ cd idefix
+$ git branch mybranch
+$ git checkout mybranch
+```
+
+```mermaid
+%%{init: {'gitGraph': {'mainBranchName': 'master'}}}%%
+gitGraph:
+  commit
+  commit
+  commit
+  commit
+  branch mybranch
+```
+
+### Patch it
+
+Edit the code with your favourite code editor, then commit changes to your branch
+```
+$ git add -u
+$ git commit -m "description of the change"
+```
+
+
+```mermaid
+%%{init: {'gitGraph': {'mainBranchName': 'master'}}}%%
+gitGraph:
+  commit
+  commit
+  commit
+  commit
+  branch mybranch
+  commit
+```
+### Push it
+
+```
+$ git push
+```
+
+oops, that didn't work... But the error message tells us exactly what's needed !
+```shell
+$ git push --set-upstream origin mybranch
+```
+
+### Open a Pull Request
+
+Return to [https://github.com/idefix-code/idefix](https://github.com/idefix-code/idefix)
+
+![pull request](img/Screenshot-pull_request.png)
+- select the target branch (`master` by default)
+- explain what your patch does / what problem it solves (is it a new feature, a bugfix ?)
+- if it resolves an known issue, include "close #(issue number)" in the message
+
+
+
+## automated validation (continuous integration)
+
+Your patch needs to be validated (in short, checked for regressions). This process
+is performed automatically when you open a pull request and when you push new commits to
+a branch associated with a pull request.
+
+### lint
+
+> *linting* is the process of statically checking the code for common stylistic mistakes
+> and known pitfalls.
+
+We use `pre-commit` to lint idefix. You can replicate this process locally by
+[installing pre-commit](https://pre-commit.com/#install), then running
+
+```
+$ pre-commit run --all-files
+```
+
+It is also recommended to use `pre-commit` continuously so it runs every time you invoke
+`git commit ...`. This is achieved by running `pre-commmit install` (once).
+
+It can be frustrating at times that pre-commit may prevent you from saving your work, so
+know that you can disable it for a quick-and-dirty commit as
+```
+$ git commit ... --no-verify
+```
+
+
+### tests (Continuous Integration (CI))
+
+This is the most important part of automated validation. Setups in `test/` are built
+against your revision, run on GPU (some of them in parallel), and outputs are validated,
+by means of comparison with analytical solution and/or with previous "known good"
+results.
+
+This process ensures that code changes do not break existing functionality (this is
+what's called a *regression*). Regressions are extremely common during development,
+do not be alarmed ! When you have several, just pick the first one, run the test locally,
+iterate on your patch until the test passes without error, commit, and push again !
+Rince and repeat until all regressions are gone !
+
+In idefix v2.0 (in prep), it is possible to run test setup locally with a simple call:
+```shell
+$ cd $IDEFIX_DIR/test/path/to/my/test
+$ python testme.py
+```
+
+> Note 1
+>
+> On some machines, the `python` command uses Python 2, but we need Python 3
+> In such an environment, the command `python3` may be used instead.
+
+> Note 2
+>
+> running idefix's tests requires a couple Python modules that may not be installed
+> depending on your exact environment. All requirements can be installed in one go with
+> ```shell
+> $ python -m pip install -r $IDEFIX_DIR/test/python_requirements.txt
+> ```
+
+In most cases, it is recommended (and it may be requested during review) to add a new
+test along with your patch, so we can validate that your code keeps working in the
+future.
+
+
+## Reviews
+
+This is when human interaction comes in again !
+Maintainers (Geoff) will have a look at your code and may ask questions and/or request
+changes.
+
+This process may be iterative. Please be patient about it and understand that
+maintainers (not just idefix's) are usually busy and may be take a couple days to
+respond.
+
+When your patch is ready (tested and approved), it will be merged !

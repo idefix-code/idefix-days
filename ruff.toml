@@ -1,3 +1,5 @@
+target-version = "py38"
+
 # Enable flake8-bugbear (`B`) rules.
 select = ["E", "W", "F", "B", "I", "UP"]
 
