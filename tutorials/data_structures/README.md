@@ -8,15 +8,14 @@
 - [Arrays: `IdefixArrayND`](#arrays-idefixarraynd)
 - [Loops and kernels: `idefix_for`](#loops-and-kernels-idefix_for)
   * [Important notes on kernel GPU portability](#important-notes-on-kernel-gpu-portability)
+  * [DataBlocks](#datablocks)
 
 <!-- tocstop -->
 
 ## Scope
 This session will focus on `idefix` idioms that are essential to make the code
 *portable* (ensuring it builds and runs on many architectures, including CPUs and GPUs).
-We will cover `IdefixArrayND<T>`, and `idefix_for`. Backstage, all these structures are
-powered by `Kokkos`, but it is rarely necessary to use `Kokkos` directly to program in
-`idefix`.
+We will cover `IdefixArrayND<T>`, `idefix_for` and `DataBlock`.
 
 As a preamble, we'll start by reviewing the fundamental differences between
 CPU and GPU.
@@ -205,3 +204,54 @@ Generalizing to 3 and 4D is left as an exercise to the reader.
 - pointers (in particular, `this->`) cannot be captured in a kernel (although it builds
   fine on CPU targets !)
 - `if/else` (branching) is very expensive
+
+
+
+### DataBlocks
+
+In `idefix`, the global state of the program is encapsulated in classes.
+
+`DataBlock` is central to class interactions: it knows about every components of the
+global state, and all of them know it too !
+
+Here's a simplified graph representing these connections.
+
+```mermaid
+mindmap
+    root((DataBlock))
+      Outputs
+        Vtk
+        Dump
+      Hydro
+        ReimannSolver
+        Viscosity
+        ThermalDiffusion
+      Grid
+      ...
+```
+
+This means that you can access every parts of the global state by going through your
+local `DataBlock`.
+
+```cpp
+void UserdefBoundary(Hydro *hydro, int dir, BoundarySide side, real t) {
+  DataBlock *data = hydro->data;
+  IdefixArray1D<real> x1 = data->x[IDIR]; // shallow copy !
+  IdefixArray1D<real> x3 = data->x[KDIR]; // shallow copy !
+  idefix_for(
+    //my very smart code here
+  );
+}
+```
+
+Note that we create shallow copies of every `IdefixArray` we'll need in our
+`idefix_for`, but no data is actually being copied (so it's actually very cheap). This
+is important for GPU compatibility.
+
+
+> When running idefix with domain decomposition (MPI) each process gets its own
+> DataBlock, so the attached grid represents the current process' subdomain only.
+
+> `DataBlockHost` is the host-side mirror of `DataBlock`.
+> In the following sessions you'll see how to make them talk to each other to send data
+> from host to device space (and vice versa).
