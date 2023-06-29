@@ -17,6 +17,7 @@ repos:
     rev: v2.2.4
     hooks:
     - id: codespell
+      args: [-L, environement]
 
 -   repo: https://github.com/psf/black
     rev: 23.3.0
