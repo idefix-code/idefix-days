@@ -190,7 +190,7 @@ idefix_for(
 ```
 
 > important: in `ND` (`N`>1), the contiguous index is the last one (here `i`)
-> IdefixArrays use *Fortran-like* layout.
+> IdefixArrays use *C-like* layout.
 
 Generalizing to 3 and 4D is left as an exercise to the reader.
 
