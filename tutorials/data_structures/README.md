@@ -13,10 +13,10 @@
 
 ## Scope
 This session will focus on `idefix` idioms that are essential to make the code
-*portable* (ensuring it builds and runs on many architectures, including CPUs and
-GPUs). We will cover `IdefixArrayND<T>`, `idefix_for` and `idefix_reduce`. Backstage,
-all these structures are powered by `Kokkos`, but it is rarely necessary to use `Kokkos`
-directly to program in `idefix`.
+*portable* (ensuring it builds and runs on many architectures, including CPUs and GPUs).
+We will cover `IdefixArrayND<T>`, and `idefix_for`. Backstage, all these structures are
+powered by `Kokkos`, but it is rarely necessary to use `Kokkos` directly to program in
+`idefix`.
 
 As a preamble, we'll start by reviewing the fundamental differences between
 CPU and GPU.
@@ -24,8 +24,8 @@ CPU and GPU.
 ## CPU VS GPU: essentials
 
 - CPUs execute instructions sequentially -> loops are sequential
-- GPUs run *the same instruction* many times in parallel -> *kernels* are
-  threaded (where "many" = 32, typically)
+- GPUs run *the same instruction* many times at once -> *kernels* are
+  vectorized (where "many" = 10^3, typically)
 
 CPUs are much more versatile, but GPUs are much faster for the few tasks they are able
 to perform.
@@ -42,10 +42,9 @@ to perform.
 <img src="img/rake.jpg" alt="rake" width="300">
 </details>
 
-To keep the code portable, we'll need to write our *kernels* in a way that can
-be compiled as sequential loops when targeting CPUs.
-
-We'll see later how to achieve this with `idefix_for`.
+To keep the code portable, we'll need to write our *kernels* in a way that can be
+compiled as sequential loops when targeting CPUs. We'll see how to achieve this with
+`idefix_for`.
 
 
 ## Device / Host dichotomy
@@ -57,9 +56,9 @@ adds complexity.
 
 In order to achieve maximal performance *and* minimal complexity, we divide the code
 we write in two parts:
-- intensive loops are written as GPU kernels
+- intensive loops are written as `idefix_for`
 - the overarching execution flow, as well as certain operations (like IO), are still
-  written as pure C++.
+  written as mainline C++.
 
 **ILLUSTRATION HERE**
 
@@ -127,13 +126,19 @@ IdefixArray3D<double> arr(
 > `IdefixHostArrayND<T>` are host-space arrays, they are used to *mirror* data in device
 > space. Host<->Device synchronisation is only performed when needed.
 
+> Note 4
+>
+> Kernels are executed in the order they are submitted, *but* the host doesn't stop to
+> wait for the device.
 
 ## Loops and kernels: `idefix_for`
 
+`idefix_for` is an abstraction that can be compiled to GPU kernels *or* as simple `for`
+loops, depending on the target architecture.
+
 As an example, let's see how we would fill a 100-element 1D array with `1.0`.
 
-First, in pure
-`C++`:
+First, in simple `C++`:
 ```cpp
 const int N = 256;
 double[N] data;
@@ -197,7 +202,6 @@ Generalizing to 3 and 4D is left as an exercise to the reader.
 
 ### Important notes on kernel GPU portability
 
-
-> `this->` cannot be captured in a kernel (although it builds fine on CPU targets !)
-
-> `if/else` (branching) is very expensive
+- pointers (in particular, `this->`) cannot be captured in a kernel (although it builds
+  fine on CPU targets !)
+- `if/else` (branching) is very expensive
