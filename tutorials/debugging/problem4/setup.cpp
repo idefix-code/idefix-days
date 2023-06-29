@@ -40,8 +40,8 @@ void MySoundSpeed(DataBlock &data, const real t, IdefixArray3D<real> &cs) {
   real h0 = h0Glob;
   real flaringIndex = flaringIndexGlob;
   IdefixArray1D<real> x1=data.x[IDIR];
-  idefix_for("MySoundSpeed",0,data.np_tot[IDIR],0,data.np_tot[JDIR],0,data.np_tot[KDIR],
-              KOKKOS_LAMBDA (int i, int j, int k) {
+  idefix_for("MySoundSpeed",0,data.np_tot[KDIR],0,data.np_tot[JDIR],0,data.np_tot[IDIR],
+              KOKKOS_LAMBDA (int k, int j, int i) {
                 real R = x1(i);
                 cs(k,j,i) = h0*pow(R,flaringIndex-0.5);
               });
