@@ -95,7 +95,7 @@ Let's see how a 3D array of `double` is declared. First, in pure `C`
 const Nx = 16;
 const Ny = 16;
 const Nz = 16;
-double[Nz, Ny, Nz] arr;
+double[Nz, Ny, Nx] arr;
 ```
 
 The equivalent `IdefixArray` would be
