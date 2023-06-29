@@ -18,7 +18,7 @@ real omegaGlob;
 /*********************************************/
 /**
 Customized random number generator
-Allow one to have consistant random numbers
+Allow one to have consistent random numbers
 generators on different architectures.
 **/
 /*********************************************/
