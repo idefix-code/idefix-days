@@ -21,7 +21,7 @@ void BlockInternal(Hydro *hydro, const real t) {
     0, data->np_tot[JDIR],
     0, data->np_tot[IDIR],
               KOKKOS_LAMBDA (int k, int j, int i) {
-                
+
                 if(fabs(x1(i)-x_c )< size && fabs(x2(j)- y_c ) < size) {
                   Vc(RHO,k,j,i) = 1.0;
                   Vc(VX1,k,j,i) = 0.0;
@@ -60,7 +60,7 @@ void JetBoundary(Hydro* hydro, int dir, BoundarySide side, const real t)  {
               }
 
     });
-    
+
     }
   }
 }
@@ -87,8 +87,8 @@ void Setup::InitFlow(DataBlock &data) {
         for(int j = 0; j < d.np_tot[JDIR] ; j++) {
             for(int i = 0; i < d.np_tot[IDIR] ; i++) {
                 d.Vc(RHO,k,j,i) = ONE_F;
-                d.Vc(VX1,k,j,i) = ZERO_F;
-                d.Vc(VX2,k,j,i) = ZERO_F;
+                d.Vc(VX1,k,j,i) = (0.5-idfx::randm())*0.2;
+                d.Vc(VX2,k,j,i) = (0.5-idfx::randm())*0.2;
             }
         }
     }
