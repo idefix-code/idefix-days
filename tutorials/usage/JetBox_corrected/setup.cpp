@@ -10,32 +10,33 @@ void JetBoundary(Hydro* hydro, int dir, BoundarySide side, const real t)  {
   IdefixArray4D<real> Vc = hydro->Vc;
   IdefixArray1D<real> x1 = hydro->data->x[IDIR];
 
-  if(dir==JDIR) { // BC in radial direction (at r_0 and R)
+  if(dir==JDIR) {
 
+    if(side == left) {
+      int jghost = hydro->data->nghost[JDIR]; // first active cell of the domain
 
-    if(side == left) {  // au début du domaine : r0
-      int ighost = hydro->data->nghost[IDIR];
 
       hydro->boundary->BoundaryFor("UserDefBoundaryX2Beg", dir, side,
                         KOKKOS_LAMBDA (int k, int j, int i) {
 
               real x=x1(i);
 
-              if (fabs(x-0.5) < 0.05){
+              if (fabs(x-0.5) < 0.05){ // inside the jet
                 Vc(RHO,k,j,i) = 10.;
                 Vc(VX2,k,j,i) = 10;
-                Vc(VX1,k,j,i) = Vc(VX1,k,j,ighost);
-              } else {
-                Vc(RHO,k,j,i) = Vc(RHO,k,j,ighost);
-                Vc(VX2,k,j,i) = Vc(VX2,k,j,ighost);
-                Vc(VX1,k,j,i) = Vc(VX1,k,j,ighost);
+                Vc(VX1,k,j,i) = Vc(VX1,k,jghost,i);
+              } else { // otherwise we copy the state of the first active cell
+                Vc(RHO,k,j,i) = Vc(RHO,k,jghost,i);
+                Vc(VX2,k,j,i) = Vc(VX2,k,jghost,i);
+                Vc(VX1,k,j,i) = Vc(VX1,k,jghost,i);
               }
 
     });
-    
+
     }
   }
 }
+
 // Initialisation routine. Can be used to allocate
 // Arrays or variables which are used later on
 Setup::Setup(Input &input, Grid &grid, DataBlock &data, Output &output) {
@@ -58,8 +59,8 @@ void Setup::InitFlow(DataBlock &data) {
         for(int j = 0; j < d.np_tot[JDIR] ; j++) {
             for(int i = 0; i < d.np_tot[IDIR] ; i++) {
                 d.Vc(RHO,k,j,i) = ONE_F;
-                d.Vc(VX1,k,j,i) = ZERO_F;
-                d.Vc(VX2,k,j,i) = ZERO_F;
+                d.Vc(VX1,k,j,i) = (0.5-idfx::randm())*0.2;
+                d.Vc(VX2,k,j,i) = (0.5-idfx::randm())*0.2;
             }
         }
     }
