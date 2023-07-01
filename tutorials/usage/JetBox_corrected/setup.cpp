@@ -2,10 +2,6 @@
 #include "setup.hpp"
 
 
-// Default constructor
-
-
-
 void JetBoundary(Hydro* hydro, int dir, BoundarySide side, const real t)  {
   IdefixArray4D<real> Vc = hydro->Vc;
   IdefixArray1D<real> x1 = hydro->data->x[IDIR];
@@ -42,8 +38,6 @@ void JetBoundary(Hydro* hydro, int dir, BoundarySide side, const real t)  {
 Setup::Setup(Input &input, Grid &grid, DataBlock &data, Output &output) {
     data.hydro->EnrollUserDefBoundary(&JetBoundary);
 }
-
-
 
 
 // This routine initialize the flow
