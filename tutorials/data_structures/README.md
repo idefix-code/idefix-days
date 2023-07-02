@@ -8,13 +8,14 @@
 - [Arrays: `IdefixArrayND`](#arrays-idefixarraynd)
 - [Loops and kernels: `idefix_for`](#loops-and-kernels-idefix_for)
   * [Important notes on kernel GPU portability](#important-notes-on-kernel-gpu-portability)
-  * [DataBlocks](#datablocks)
+- [DataBlocks](#datablocks)
 
 <!-- tocstop -->
 
 ## Scope
-This session will focus on `idefix` idioms that are essential to make the code
-*portable* (ensuring it builds and runs on many architectures, including CPUs and GPUs).
+
+In this session we will cover the fundamental structures provided by `idefix.hpp`
+and explain how data is organized and handled.
 We will cover `IdefixArrayND<T>`, `idefix_for` and `DataBlock`.
 
 As a preamble, we'll start by reviewing the fundamental differences between
@@ -27,7 +28,8 @@ CPU and GPU.
   vectorized (where "many" = 10^3, typically)
 
 CPUs are much more versatile, but GPUs are much faster for the few tasks they are able
-to perform.
+to perform, and luckily, applying the same operation to many elements in an array is
+exactly what they excel at !
 
 > **Pop quizz !**
 >
@@ -41,16 +43,16 @@ to perform.
 <img src="img/rake.jpg" alt="rake" width="300">
 </details>
 
-To keep the code portable, we'll need to write our *kernels* in a way that can be
+To keep the code *portable*, we'll need to write our *kernels* in a way that can be
 compiled as sequential loops when targeting CPUs. We'll see how to achieve this with
 `idefix_for`.
 
 
 ## Device / Host dichotomy
 
-Divide and conquer: GPUs are very efficient and fast *at certain tasks*, but there are
+So GPUs are very efficient and fast *at certain tasks*, but there are
 still a variety of things our program needs to do that are better left to CPUs, like
-input/output (IO), calling functions. As we'll see, writing GPU-capable code also
+input/output (IO), calling functions... As we'll see, writing GPU-capable code also
 adds complexity.
 
 In order to achieve maximal performance *and* minimal complexity, we divide the code
@@ -59,14 +61,13 @@ we write in two parts:
 - the overarching execution flow, as well as certain operations (like IO), are still
   written as mainline C++.
 
-**ILLUSTRATION HERE**
-
-We call *host* the physical part of the machine that run the execution flow (always a
+We call *host* the physical part of the machine that runs the execution flow (always a
 CPU), and we call *device* the part that executes intensive loops (which may be a GPU
 *or* a CPU).
 
-It is important to understand that host memory and device memory are separate: data that
-exists in *host space* cannot directly be accessed from *device space*, and vice-versa.
+It is important to understand that host memory and device memory are separate spaces:
+data that exists in *host space* cannot directly be accessed from *device space*, and
+vice-versa.
 
 
 
@@ -86,7 +87,7 @@ Where `T` is a placeholder typename for the contained data type (Idefix arrays a
 
 Note that `idefix.hpp`, which is included everywhere throughout idefix's code base,
 defines a `real` type alias, which can represent `double` or `float` (single precision),
-and is known at compile-time. So in practice we'll mostly use `IdefixArrayND<real>`.
+and is known at compile-time. In practice most arrays are `IdefixArrayND<real>`.
 
 Let's see how a 3D array of `double` is declared. First, in pure `C`
 ```cpp
@@ -103,7 +104,7 @@ The equivalent `IdefixArray` would be
 const Nx = 16;
 const Ny = 16;
 const Nz = 16;
-IdefixArray3D<double> arr(
+IdefixArray3D<real> arr(
     "my array", // array label
     Nz, Ny, Nx // array dimensions
 );
@@ -207,7 +208,7 @@ Generalizing to 3 and 4D is left as an exercise to the reader.
 
 
 
-### DataBlocks
+## DataBlocks
 
 In `idefix`, the global state of the program is encapsulated in classes.
 
