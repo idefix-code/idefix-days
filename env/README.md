@@ -19,7 +19,7 @@ git clone https://github.com/idefix-code/idefix-days.git ~/idefix-days
 
 ## Connect to a compute node, load the environement, compile and run
 
-First, note that the compute nodes are shared between all of us during the workshop. Hence, we limit each reservation to 30 minutes so that everybody can experiment both architectures (we have booked 16 Nvidia GPUs and 8 AMD GPUs). 
+First, note that the compute nodes are shared between all of us during the workshop. Hence, we limit each reservation to 30 minutes so that everybody can experiment both architectures (we have booked 16 Nvidia GPUs and 8 AMD GPUs).
 
 [Gricad](https://gricad.univ-grenoble-alpes.fr), the infrastructure hosting Grenoble GPU compute nodes, uses a homemade job scheduler called OAR. Follow the instructions below to request an interactive node with OAR and then activate the compilation environement.
 
@@ -97,4 +97,3 @@ make -j 4
 ./idefix
 ```
 </p>
-

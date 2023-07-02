@@ -3,10 +3,17 @@
 <!-- toc -->
 
 - [Pre-requisities](#pre-requisities)
-- [Problem1: CPU side segmentation fault](#problem1-a-cpu-segmentation-fault)
-- [Problem2: GPU side segmentation fault](#problem2-a-gpu-segmentation-fault)
-- [Problem3: GPU side segmentation fault in a user-class](#problem-3-gpu-segmentation-fault)
-- [Problem4: performance problem](#problem-4-a-low-performance-bug)
+- [Problem1: a CPU segmentation fault](#problem1-a-cpu-segmentation-fault)
+  * [Base run](#base-run)
+  * [Track down the bug with Idefix_DEBUG](#track-down-the-bug-with-idefix_debug)
+  * [Track down the bug with a debugger](#track-down-the-bug-with-a-debugger)
+  * [Use Kokkos bound check to nail it down](#use-kokkos-bound-check-to-nail-it-down)
+- [Problem2: a GPU segmentation fault](#problem2-a-gpu-segmentation-fault)
+  * [Base run](#base-run-1)
+  * [Let's debug this](#lets-debug-this)
+- [Problem 3: GPU segmentation fault](#problem-3-gpu-segmentation-fault)
+- [Problem 4: a low performance bug.](#problem-4-a-low-performance-bug)
+  * [Tracking down performance issue: profiling with Kokkos](#tracking-down-performance-issue-profiling-with-kokkos)
 
 <!-- tocstop -->
 
@@ -112,7 +119,7 @@ make -j 8
 ./idefix
 ```
 
-And this runs beaufiully, congrats! 
+And this runs beaufiully, congrats!
 
 Now, let's run this on a GPU. First follow the procedure describe in the [environement tutorial](../../env/README.md) to connect to a compute node and set up your environement, then go to the problem2 directory, configure for GPU, compile and run...
 
@@ -127,7 +134,7 @@ As for problem 1, the first step is to enable the debugging in Idefix. To do thi
 ```shell
 cmake $IDEFIX_DIR -DIdefix_DEBUG=ON <$YOUR_TEAM_FLAG>
 ```
-where ``<$YOUR_TEAM_FLAG>`` is either ``$AMD_FLAGS`` or ``$NVIDIA_FLAGS``. 
+where ``<$YOUR_TEAM_FLAG>`` is either ``$AMD_FLAGS`` or ``$NVIDIA_FLAGS``.
 then recompile and run
 ```shell
 make -j 4
@@ -167,7 +174,7 @@ A way to fix this is to do copies of everything you need locally before calling 
 ```c++
   void InternalBoundary(Fluid<DefaultPhysics> * hydro, const real t) {
     // We shallow copy Vc locally first using the pointer in CPU memory space.
-    IdefixArray4D<real> Vc = hydro->Vc; 
+    IdefixArray4D<real> Vc = hydro->Vc;
     idefix_for("InternalBoundary",0,hydro->data->np_tot[KDIR],
                                   0,hydro->data->np_tot[JDIR],
                                   0,hydro->data->np_tot[IDIR],
@@ -189,7 +196,7 @@ content.
 
 ## Problem 3: GPU segmentation fault
 
-Problem 3 is a disk+planet problem. It introduces the concept of additional source files, that are added to Idefix using the ``add_idefix_source`` function in the `CMakeLists.txt` of the setup (check it out). Here, the additional source files defines a new class that compute the sound speed at every point. 
+Problem 3 is a disk+planet problem. It introduces the concept of additional source files, that are added to Idefix using the ``add_idefix_source`` function in the `CMakeLists.txt` of the setup (check it out). Here, the additional source files defines a new class that compute the sound speed at every point.
 
 Follow the same procedure as for problem 2: configure, compile and run it on your laptop and then on the GPU of your choice. Follow the same debugging tracks as problem 3 and try to nail it down. Can you find where the error is?
 
@@ -247,11 +254,11 @@ Let's move to problem 4, which is again a planet-disk interraction problem. This
 cd idefix-days/tutorials/debugging/problem4
 ```
 
-We then configure 
+We then configure
 ```shell
 cmake $IDEFIX_DIR <$YOUR_TEAM_FLAG>
 ```
-where ``<$YOUR_TEAM_FLAG>`` is either ``$AMD_FLAGS`` or ``$NVIDIA_FLAGS``, 
+where ``<$YOUR_TEAM_FLAG>`` is either ``$AMD_FLAGS`` or ``$NVIDIA_FLAGS``,
 then compile and run
 ```shell
 make -j 4
