@@ -283,12 +283,14 @@ Now we you have all of the information about what the code is doing and where it
   From this inspection, can you tell what is the problem?
 
 <details><summary>Analysis of the bug</summary>
+
 As you can see in the space-time stack, the code spends a lot of time in the user-defined analysis function, and in particular in the Host copy of the datablock. That's a typical example where you see that transfering data from the GPU to the CPU is actually relatively slow. Now that we have understood that the code spends a lot of time in the analysis function, can you find an easy fix to this?
 
 </p>
 </details>
 
 <details><summary>Solution</summary>
+
 If you inspect `idefix.ini`, you will see that the entry ``analysis`` of the block ``[Output]`` is set to 0. This means that idefix will run the user-defined analysis at each time step. That's probably not what was intended, so the best thing to do is to put a non-zero number to ``analysis``, like 0.01. After this, check that you recover the expected performance!
 </p>
 </details>
