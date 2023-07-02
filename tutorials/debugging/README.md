@@ -277,7 +277,10 @@ That's it, that's all, just re-run the code (no need to compile!), and wait...
 ```shell
 ./idefix
 ```
-Now we you have all of the information about what the code is doing and where it's spending its time. From this inspection, can you tell what is the problem?
+
+Now we you have all of the information about what the code is doing and where it's spending its time. Note *en passant* that the name of the regions is the one provided by ``idfx::pushRegion`` the names of the  "for" and "reduce" are that provided to ``idefix_for`` and ``idefix_reduce``, and finally, the name given to the ``IdefixArray`` constructor is reflected in the ``Kokkos::view::initialization``. So all these strings that are provided in the code turns out really useful!
+
+  From this inspection, can you tell what is the problem?
 
 <details><summary>Analysis of the bug</summary>
 As you can see in the space-time stack, the code spends a lot of time in the user-defined analysis function, and in particular in the Host copy of the datablock. That's a typical example where you see that transfering data from the GPU to the CPU is actually relatively slow. Now that we have understood that the code spends a lot of time in the analysis function, can you find an easy fix to this?
