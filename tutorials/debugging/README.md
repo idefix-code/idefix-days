@@ -3,10 +3,10 @@
 <!-- toc -->
 
 - [Pre-requisities](#pre-requisities)
-- [Problem1: CPU side segmentation fault](#cpu-vs-gpu-essentials)
-- [Problem2: GPU side segmenetation fault](#device--host-dichotomy)
-- [Problem3: GPU side segmentation fault in a user-class](#arrays-idefixarraynd)
-- [Problem4: performance problem](#loops-and-kernels-idefix_for)
+- [Problem1: CPU side segmentation fault](#problem1-a-cpu-segmentation-fault)
+- [Problem2: GPU side segmentation fault](#problem2-a-gpu-segmentation-fault)
+- [Problem3: GPU side segmentation fault in a user-class](#problem-3-gpu-segmentation-fault)
+- [Problem4: performance problem](#problem-4-a-low-performance-bug)
 
 <!-- tocstop -->
 
@@ -14,7 +14,7 @@
 
 This session assumes that you know how to connect and work on the Bigfoot cluster. If not, follow the [tutorial on bigfoot](../../env/README.md).
 
-## Problem1
+## Problem1: a CPU segmentation fault
 
 ### Base run
 The first problem is a simple 1D shock tube problem. This can be compiled and run *on your laptop*.
@@ -96,7 +96,7 @@ for(int k = 0; k < d.np_tot[KDIR] ; k++) {
 </details>
 
 
-## Problem2
+## Problem2: a GPU segmentation fault
 
 ### Base run
 The second problem is a pure thermal diffusion problem where the gas is kept fixed with 0 velocity. This can be compiled and run *on your laptop*.
@@ -187,11 +187,11 @@ content.
 </p>
 </details>
 
-## Problem 3
+## Problem 3: GPU segmentation fault
 
 Problem 3 is a disk+planet problem. It introduces the concept of additional source files, that are added to Idefix using the ``add_idefix_source`` function in the `CMakeLists.txt` of the setup (check it out). Here, the additional source files defines a new class that compute the sound speed at every point. 
 
-Follow the same procedure as for problem 2: configure, compile and run it on your laptop and then on the GPU of your choice. Follow the same debugging track and try to nail it down. Can you find where the error is?
+Follow the same procedure as for problem 2: configure, compile and run it on your laptop and then on the GPU of your choice. Follow the same debugging tracks as problem 3 and try to nail it down. Can you find where the error is?
 
 <details><summary>Explanation</summary>
 
@@ -233,6 +233,59 @@ The solution is the same as for problem2: just do shallow copies:
 }
 ```
 
-This kind of bug is very common and very hard to track down sometimes. Actually, there are entire discussions about this [on the Kokkos repo](https://github.com/kokkos/kokkos/issues/695)... It turns out it is a defect of the C++ standard.
+
+This kind of bug is very common and very hard to track down sometimes. Actually, there are entire discussions about this [on the Kokkos repo](https://github.com/kokkos/kokkos/issues/695)... It turns out it is a defect of the C++ standard. Another workaround is to use ``KOKKOS_CLASS_LAMBDA`` instead of ``KOKKOS_LAMBDA``. This however copies the entire class content onto the GPU, which can therefore lead to a large overhead, and is therefore not recommended for general applications.
+
+</p>
+</details>
+
+## Problem 4: a low performance bug.
+
+Let's move to problem 4, which is again a planet-disk interraction problem. This can be compiled and run *on your laptop* or on the bigfoot cluster, but let's focus for now on the GPU version on the bigfoot cluster (you can try to do the exercise on your laptop, but you will need to compile Kokkos tools first). First go to the right directory
+
+```shell
+cd idefix-days/tutorials/debugging/problem4
+```
+
+We then configure 
+```shell
+cmake $IDEFIX_DIR <$YOUR_TEAM_FLAG>
+```
+where ``<$YOUR_TEAM_FLAG>`` is either ``$AMD_FLAGS`` or ``$NVIDIA_FLAGS``, 
+then compile and run
+```shell
+make -j 4
+./idefix
+```
+At this point, Idefix should run fine and finishes. While we could be satisfied, it's always a good idea to check the code performances, shown in the column cell update/s. This quantifies how many grid cells the code is able to update per second. Note that this number is for the whole code: if you are using MPI, the number of cell update per second should be proportional to the number of MPI processes.
+
+In this particular case, we see that we get a few 1e7 cell updates/s on a single GPU. That's low: if you look at the [Idefix paper](https://ui.adsabs.harvard.edu/abs/2023arXiv230413746L/abstract), you'll see that we typically get at least 1e8 cell/sec on a single Nvidia V100 (that's about 4e8 cell/sec on a full node with 4 V100, see tables 3 & 4), and the test in the paper is 3D MHD cartesian. Our problem is 2D and hydro, so it should be more than this.
+
+There are several reasons why Idefix could be slower: more complex physics (not quite applicable here), and a too small domain size for each GPU, which is not sufficient to feed all of the computational units of the GPU (reminder: there are 1000s of computational unit in a single V100). Here, the resolution is 1024^2 (more than 1e6 cells), that is equivalent to a 100^3 3D problem. This should be largely sufficient to feed a V100, so we clearly have a problem.
+
+### Tracking down performance issue: profiling with Kokkos
+
+While there are vendor-specific tools (like Nvidia systems), Idefix seeks portability. It turns out that Kokkos provides its own profiling tools: the space time stack. As usual with Kokkos tools, this is enabled by setting ``KOKKOS_TOOLS_LIBS`` to the path of the compiled space-time-stack library. In our case, this is:
 
 
+```shell
+export KOKKOS_TOOLS_LIBS=$KOKKOS_TOOLS_DIR/profiling/space-time-stack/libkp_space_time_stack.so
+```
+
+That's it, that's all, just re-run the code (no need to compile!), and wait...
+
+```shell
+./idefix
+```
+Now we you have all of the information about what the code is doing and where it's spending its time. From this inspection, can you tell what is the problem?
+
+<details><summary>Analysis of the bug</summary>
+As you can see in the space-time stack, the code spends a lot of time in the user-defined analysis function, and in particular in the Host copy of the datablock. That's a typical example where you see that transfering data from the GPU to the CPU is actually relatively slow. Now that we have understood that the code spends a lot of time in the analysis function, can you find an easy fix to this?
+
+</p>
+</details>
+
+<details><summary>Solution</summary>
+If you inspect `idefix.ini`, you will see that the entry ``analysis`` of the block ``[Output]`` is set to 0. This means that idefix will run the user-defined analysis at each time step. That's probably not what was intended, so the best thing to do is to put a non-zero number to ``analysis``, like 0.01. After this, check that you recover the expected performance!
+</p>
+</details>
