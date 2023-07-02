@@ -4,7 +4,6 @@
 
 - [General introduction](#general-introduction)
   * [Scope](#scope)
-    + [Additional resources](#additional-resources)
   * [What is `git` ?](#what-is-git-)
   * [When do you need it ?](#when-do-you-need-it-)
   * [git command line interface (CLI)](#git-command-line-interface-cli)
@@ -70,9 +69,6 @@ In particular,  history rewriting (`git rebase`) and history inspection (`git bi
 are considered *advanced*, and will not be covered here. They should not however be
 considered *esoteric*, and consistute very powerful tools for the initiated.
 
-### Additional resources
-[Interactive git sandbox](https://git-school.github.io/visualizing-git/)
-[Talking to people (PyCon 2023 Keynote)](https://www.youtube.com/watch?v=n5QaOADqSyY)
 
 ## What is `git` ?
 
@@ -568,7 +564,9 @@ means that developers (and yourself) may have (diverging ?) **opinions**, so bei
 always be sufficient to push an idea forward.
 
 This is a whole other topic but in brief: please be nice to each other.
-(nice: humble, patient, sympathetic, actively encouraging, inclusive, respectful)
+
+[(nice: humble, patient, sympathetic, actively encouraging, inclusive,
+respectful)](https://www.youtube.com/watch?v=n5QaOADqSyY&t=2s)
 
 ## Pre-requisites
 
@@ -595,10 +593,11 @@ Most of the time, they are used to report *bugs*. I'll include the first line fr
 Note that this includes *but isn't limited to* runtime crashes !
 
 Issues themselves are not limited to bug reports. They can also be used to propose and
-discuss new features.
+discuss new features or ask questions !
+
+![issue selection](img/Screenshot-issue_selection.png)
 
 [Creating an issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue)
-
 
 ### Before you report
 
@@ -607,6 +606,7 @@ discuss new features.
 
 
 ### Bug report good practices
+![bug report](img/Screenshot-bugreport.png)
 
 When reporting a bug, it's important to be explicit and comprehensive.
 
