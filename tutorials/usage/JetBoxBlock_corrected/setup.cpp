@@ -3,7 +3,7 @@
 
 
 void BlockInternal(Hydro *hydro, const real t) {
-  auto *data = hydro->data;
+  DataBlock *data = hydro->data;
   IdefixArray4D<real> Vc = hydro->Vc;
   IdefixArray1D<real> x1=data->x[IDIR];
   IdefixArray1D<real> x2=data->x[JDIR];
