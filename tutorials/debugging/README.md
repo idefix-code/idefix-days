@@ -290,7 +290,7 @@ Now we you have all of the information about what the code is doing and where it
   From this inspection, can you tell what is the problem?
 
 <details><summary>Analysis of the bug</summary>
-As you can see in the space-time stack, the code spends a lot of time in the user-defined analysis function, and in particular in the Host copy of the datablock. That's a typical example where you see that transfering data from the GPU to the CPU is actually relatively slow. Now that we have understood that the code spends a lot of time in the analysis function, can you find an easy fix to this?
+As you can see in the space-time stack, the code spends a lot of time in the user-defined analysis function, and in particular in the Host copy of the datablock. That's a typical example where you see that transferring data from the GPU to the CPU is actually relatively slow. Now that we have understood that the code spends a lot of time in the analysis function, can you find an easy fix to this?
 
 </p>
 </details>
