@@ -13,11 +13,6 @@ repos:
     - id: check-executables-have-shebangs
     - id: check-yaml
 
--   repo: https://github.com/codespell-project/codespell
-    rev: v2.2.4
-    hooks:
-    - id: codespell
-
 -   repo: https://github.com/psf/black
     rev: 23.3.0
     hooks:
@@ -37,6 +32,11 @@ repos:
       - --quiet
       - --fix
 
+- repo: https://github.com/neutrinoceros/inifix.git
+  rev: v4.3.2
+  hooks:
+    - id: inifix-format
+
 - repo: https://github.com/nbQA-dev/nbQA
   rev: 1.7.0
   hooks:
@@ -55,4 +55,10 @@ repos:
   rev: v1.1.2
   hooks:
   - id: markdown-toc
-    files: tutorials/git/README.md
+    files: README.md
+
+-   repo: https://github.com/codespell-project/codespell
+    rev: v2.2.4
+    hooks:
+    - id: codespell
+      args: [-L, environement]

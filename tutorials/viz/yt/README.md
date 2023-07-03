@@ -6,5 +6,5 @@ See [requirements](../README.md)
 ## Getitng started
 Open the jupyter notebook.
 ```shell
-$ jupyterlab Intro_to_yt.ipynb
+$ jupyter lab Intro_to_yt.ipynb
 ```
