@@ -660,10 +660,15 @@ doubt, prefer sharing too much than too little.
 
 > A *patch* may be a *(bug)fix* or a new *feature*.
 
-We'll review the steps towards contributing a patch. Following the whole procedure can
-be a little overwhelming, but note that most of the steps are only needed the first time
-you do it, so it's much simpler the second time. The process is also identical for many
-open source projects !
+
+
+We'll review the steps towards contributing a
+patch. Following the whole procedure can be a little overwhelming, but note that most of
+the steps are only needed the first time you do it, so it's much simpler the second
+time. The process is also identical for many open source projects !
+
+In order to get some practice without polluting idefix's repo, here we'll work with a
+mock project with none of the source code but all of the infrastructure: https://github.com/idefix-code/idefox
 
 ### Fork it
 Because you don't have commit-rights on the `idefix-code` repository, you'll need to
