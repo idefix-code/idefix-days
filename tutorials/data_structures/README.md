@@ -126,11 +126,6 @@ IdefixArray3D<real> arr(
 > `IdefixHostArrayND<T>` are host-space arrays, they are used to *mirror* data in device
 > space. Host<->Device synchronisation is only performed when needed.
 
-> Note 4
->
-> Kernels are executed in the order they are submitted, *but* the host doesn't stop to
-> wait for the device.
-
 ## Loops and kernels: `idefix_for`
 
 `idefix_for` is an abstraction that can be compiled to GPU kernels *or* as simple `for`
@@ -167,11 +162,12 @@ idefix_for(
 
 > Just like arrays, kernels have labels, which are equally important for debugging.
 
-> Note that C-array elements are accessed with `[]` while IdefixArray elements
+> Note that C-array elements are accessed with `[]` while `IdefixArray` elements
 > are accessed with `()`
 
 > Memory allocation is very expensive. Most of the time you'll be processing
-> `IdefixArray`s that are *already* allocated.
+> `IdefixArray`s that are *already* allocated. If you need additional arrays, avoid
+> reallocating them on each cycle: reuse allocated memory as often as possible.
 
 How about a 2D version of this ?
 ```cpp
@@ -204,8 +200,10 @@ Generalizing to 3 and 4D is left as an exercise to the reader.
 
 - pointers (in particular, `this->`) cannot be captured in a kernel (although it builds
   fine on CPU targets !)
-- `if/else` (branching) is very expensive
-
+- `if/else` (branching) is computationally **very** expensive on GPU
+- Kernels are executed in the order they are submitted, **but** the host doesn't stop to
+  wait for the device. This is important when managing `MPI` exchanges (the host is
+  happy trade data in buffers that the device isn't done writing !).
 
 
 ## DataBlocks
