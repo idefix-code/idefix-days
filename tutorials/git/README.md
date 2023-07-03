@@ -4,7 +4,6 @@
 
 - [General introduction](#general-introduction)
   * [Scope](#scope)
-    + [Additional resources](#additional-resources)
   * [What is `git` ?](#what-is-git-)
   * [When do you need it ?](#when-do-you-need-it-)
   * [git command line interface (CLI)](#git-command-line-interface-cli)
@@ -62,7 +61,7 @@ In the second part, we'll discuss practical aspects of collaborating on GitHub f
 project like `idefix`.
 
 - bug reports (issues)
-- contributing patches (pull requests) reviewing
+- contributing patches (pull requests), reviewing
 - continuous integration (CI for shorts) (lint and tests)
 
 Mastering `git` goes well beyond the scope of the present document.
@@ -70,9 +69,6 @@ In particular,  history rewriting (`git rebase`) and history inspection (`git bi
 are considered *advanced*, and will not be covered here. They should not however be
 considered *esoteric*, and consistute very powerful tools for the initiated.
 
-### Additional resources
-[Interactive git sandbox](https://git-school.github.io/visualizing-git/)
-[Talking to people (PyCon 2023 Keynote)](https://www.youtube.com/watch?v=n5QaOADqSyY)
 
 ## What is `git` ?
 
@@ -81,7 +77,9 @@ considered *esoteric*, and consistute very powerful tools for the initiated.
 A *version control system* enables *management of change history* for files.
 We will see about the "distributed" part later.
 
-Here's a representation of a simple (single branch) change history, where the arrow indicates time, each dot represents a different *version*
+Here's a representation of a simple (single branch) change history, where the arrow
+indicates time, each dot represents a different *version*. Some versions receive a
+meaningful name (called a **tag**), but most don't.
 
 ```mermaid
 gitGraph
@@ -93,7 +91,7 @@ gitGraph
     commit tag: "v0.2"
     commit
 ```
-
+(left is past, right is future)
 (We will see more interesting examples later).
 
 Essentially, a VCS enables a workflow where change is *incremental*, *reversible*, and *searchable*.
@@ -103,12 +101,12 @@ This drastically decreases the cost of making mistakes and breaking things, beca
 ## When do you need it ?
 
 `git` is useful for any project you work on today and will still care about tomorow. It could be some source code, but it can also be a **paper manuscript**.
-This website itself is backed-up with `git`.
+This very document is backed-up with `git`.
 
 
 ## git command line interface (CLI)
 
-There exist *many* GUIs (Graphical User Interfaces) for git, and most IDEs
+There exist **hundreds** Graphical User Interfaces (GUIs) for git, and most IDEs
 contain some kind of `git` interface, but the fundamental interface, and the
 *only* one that is available on servers typically accessed via `ssh` tunnels, is
 the command line, so that's what we will use here.
@@ -128,22 +126,22 @@ available everywhere.
 >    If you've used git on your current machine in the past, skip this section.
 
 make sure `git` is available on your system
-```
+```shell
 $ which git
 ```
 if not, follow [official docs](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
 Next, you'll want to configure git globally
-```
+```shell
 $ git config --global user.name "John Doe"
 $ git config --global user.email johndoe@example.com
 ```
 
 ## Additional recommendations
 
-It also recommended to associate a terminal-based editor of your choice to `git`.
+It is also recommended to associate a terminal-based editor of your choice to `git`.
 For instance this is how you'd set `nano`
-```
+```shell
 $ git config --global core.editor nano
 ```
 This is because some advanced sub-commands require an editor, and its preferable
@@ -160,7 +158,7 @@ It it recommended that to sign up on GitHub.
 
 
 Create a new project (or *repository* from now on)
-```
+```shell
 $ mkdir my-project
 $ cd my-project
 $ git init
@@ -185,12 +183,12 @@ nothing to commit (create/copy files and use "git add" to track)
 
 </details>
 
->    We see that our history tree already contains a default branch named `main`. We explore the concept
->    of branches in a following section.
+>    We see that our history tree already contains a default branch named `main`. We
+>    explore the concept of branches in a following section.
 
 
 Now let's start by creating some file
-```
+```shell
 $ echo "Hello world" > README.txt
 ```
 
@@ -211,8 +209,9 @@ nothing added to commit but untracked files present (use "git add" to track)
 ```
 </details>
 
-We see that the file we just created is currently *untracked*, meaning its evolution is not followed by `git`.
-The output of `git status` also contains a helpful hint at what to do next to start tracking it:
+We see that the file we just created is currently *untracked*, meaning its evolution is
+not followed by `git`. The output of `git status` also contains a helpful hint at what
+to do next to start tracking it:
 
 ```
 $ git add README.txt
@@ -273,10 +272,12 @@ Date:   Mon Nov 28 15:22:38 2022 +0100
 There we see all our most recent commits (just one in this case).
 
 
->    In addition to the rest of our metadata (author, date, commit message), each commit is uniquely identified by a [hash](https://en.wikipedia.org/wiki/Secure_Hash_Algorithms)
->    (`956206c5db49848047ef45161ed9e457dcb5f9a8` in the example above). This is an alphanumeric string
->    that is generated by a deterministic but chaotic algorithm, which outputs are *very likely* to be unique
->    within a project.
+>    In addition to the rest of our metadata (author, date, commit message), each commit
+>    is uniquely identified by a
+>    [hash](https://en.wikipedia.org/wiki/Secure_Hash_Algorithms)
+>    (`956206c5db49848047ef45161ed9e457dcb5f9a8` in the example above). This is an
+>    alphanumeric string that is generated by a deterministic but chaotic algorithm,
+>    whose outputs are *very likely* to be unique within a project.
 
 
 
@@ -366,7 +367,7 @@ $ git checkout 956206c5db49848047ef45161ed9e457dcb5f9a8
 
 To get back to our initial state (visit the *present*) of our `main` branch
 ```
-$ git chekcout main
+$ git checkout main
 ```
 
 To get back to the *previous* position in history, a convenience, akin to `cd -` is
@@ -391,7 +392,7 @@ or simply backing up your work.
 In most cases, one machine (usually a server) will be considered the reference for all other ones.
 GitHub is one of many different platforms that offer free hosting for your git projects, but bare in mind that
 - GitHub is not git
-- there are alternative (Gitlab, Bitbucket, ...)
+- there are alternatives (Gitlab, Bitbucket, ...)
 - *any* server may be used to host a git project if needed (including machines owned by your employer)
 
 For the sake of simplicity, I will assume GitHub is our chosen remote host in the following paragraph.
@@ -549,13 +550,38 @@ where `-b` means (you guessed it) "branch".
 ### Merging back
 Reconcilling parallel histories is called *merging*.
 
+
+```mermaid
+%%{init: {'gitGraph': {'showCommitLabel': false}}}%%
+gitGraph:
+  commit
+  commit
+  commit
+  branch feature
+  checkout main
+  commit
+  checkout feature
+  commit
+  commit
+  checkout main
+  commit
+  checkout feature
+  checkout main
+  commit
+  merge feature tag: "HEAD"
 ```
+
+This operation can in principle be accomplished on the command line as follow
+```shell
 $ git checkout main
 $ git pull
 $ git merge --no-ff feature
 ```
 
-
+However, in collaborations, we need to avoid divergences to the reference copy. Because
+of that, we need to ensure that mergers only happen on the reference copy of the
+repository (in our example, on GitHub). We'll use *Pull Requests* for that, as we'll see
+in the following part.
 
 
 # Practical development
@@ -568,7 +594,9 @@ means that developers (and yourself) may have (diverging ?) **opinions**, so bei
 always be sufficient to push an idea forward.
 
 This is a whole other topic but in brief: please be nice to each other.
-(nice: humble, patient, sympathetic, actively encouraging, inclusive, respectful)
+
+[(nice: humble, patient, sympathetic, actively encouraging, inclusive,
+respectful)](https://www.youtube.com/watch?v=n5QaOADqSyY&t=2s)
 
 ## Pre-requisites
 
@@ -595,10 +623,11 @@ Most of the time, they are used to report *bugs*. I'll include the first line fr
 Note that this includes *but isn't limited to* runtime crashes !
 
 Issues themselves are not limited to bug reports. They can also be used to propose and
-discuss new features.
+discuss new features or ask questions !
+
+![issue selection](img/Screenshot-issue_selection.png)
 
 [Creating an issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue)
-
 
 ### Before you report
 
@@ -607,6 +636,7 @@ discuss new features.
 
 
 ### Bug report good practices
+![bug report](img/Screenshot-bugreport.png)
 
 When reporting a bug, it's important to be explicit and comprehensive.
 
@@ -630,10 +660,15 @@ doubt, prefer sharing too much than too little.
 
 > A *patch* may be a *(bug)fix* or a new *feature*.
 
-We'll review the steps towards contributing a patch. Following the whole procedure can
-be a little overwhelming, but note that most of the steps are only needed the first time
-you do it, so it's much simpler the second time. The process is also identical for many
-open source projects !
+
+
+We'll review the steps towards contributing a
+patch. Following the whole procedure can be a little overwhelming, but note that most of
+the steps are only needed the first time you do it, so it's much simpler the second
+time. The process is also identical for many open source projects !
+
+In order to get some practice without polluting idefix's repo, here we'll work with a
+mock project with none of the source code but all of the infrastructure: https://github.com/idefix-code/idefox
 
 ### Fork it
 Because you don't have commit-rights on the `idefix-code` repository, you'll need to
@@ -642,6 +677,10 @@ create branches !
 
 ![fork](img/Screenshot-fork.png)
 
+⚠️⚠️⚠️
+Untick the following box
+⚠️⚠️⚠️
+![fork box](img/Screenshot-copy_branches.png)
 
 ### Clone it
 *clone your fork* (i.e. create a local copy of your remote fork)
@@ -650,7 +689,7 @@ create branches !
 ![clone](img/Screenshot-clone.png)
 
 ```shell
-$ git clone git@github.com:<USER>/idefix.git
+$ git clone git@github.com:<USER>/idefix.git -b v2.0
 ```
 
 ### Branch it
