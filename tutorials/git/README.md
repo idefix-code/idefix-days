@@ -684,13 +684,13 @@ Untick the following box
 ![clone](img/Screenshot-clone.png)
 
 ```shell
-$ git clone git@github.com:<USER>/idefix.git -b v2.0
+$ git clone git@github.com:<USER>/idefox.git -b v2.0
 ```
 
 ### Branch it
 
 ```shell
-$ cd idefix
+$ cd idefox
 $ git branch mybranch
 $ git checkout mybranch
 ```
