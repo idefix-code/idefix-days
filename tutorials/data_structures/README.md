@@ -91,9 +91,9 @@ and is known at compile-time. In practice most arrays are `IdefixArrayND<real>`.
 
 Let's see how a 3D array of `double` is declared. First, in pure `C`
 ```cpp
-const Nx = 16;
-const Ny = 16;
-const Nz = 16;
+const int Nx = 16;
+const int Ny = 16;
+const int Nz = 16;
 double[Nz, Ny, Nx] arr;
 ```
 
@@ -101,9 +101,9 @@ The equivalent `IdefixArray` would be
 ```cpp
 #include "idefix.hpp"
 
-const Nx = 16;
-const Ny = 16;
-const Nz = 16;
+const int Nx = 16;
+const int Ny = 16;
+const int Nz = 16;
 IdefixArray3D<real> arr(
     "my array", // array label
     Nz, Ny, Nx // array dimensions
