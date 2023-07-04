@@ -24,7 +24,15 @@ First, note that the compute nodes are shared between all of us during the works
 [Gricad](https://gricad.univ-grenoble-alpes.fr), the infrastructure hosting Grenoble GPU compute nodes, uses a homemade job scheduler called OAR. Follow the instructions below to request an interactive node with OAR and then activate the compilation environement.
 
 <details><summary>I want to play in the green team (Nvidia)</summary>
-If a reservation is available (wednesday afternoon only):
+If a reservation is available:
+  
+Tuesday:
+
+  ```shell
+oarsub -t inner=619658 -l nodes=1/gpu=1,walltime=0:30:0 -p "gpumodel='A100'" --project idefix-23 -I
+```
+  
+Wednesday:
 
 ```shell
 oarsub -t inner=618673 -l nodes=1/gpu=1,walltime=0:30:0 -p "gpumodel='V100'" --project idefix-23 -I
@@ -59,6 +67,14 @@ make -j 4
 </details>
 <details><summary>I want to play in the red team (AMD)</summary>
 If a reservation is available (wednesday only):
+
+Tuesday:
+
+```shell
+oarsub -t inner=619621 -l nodes=1/gpu=1,walltime=0:30:0 -t amd --project idefix-23 -I
+```
+  
+Wednesday:
 
 ```shell
 oarsub -t inner=618674 -l nodes=1/gpu=1,walltime=0:30:0 -t amd --project idefix-23 -I
