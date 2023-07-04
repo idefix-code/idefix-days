@@ -3,5 +3,7 @@ target-version = "py38"
 # Enable flake8-bugbear (`B`) rules.
 select = ["E", "W", "F", "B", "I", "UP"]
 
-# Never enforce `E501` (line length violations).
-ignore = ["E501"]
+ignore = [
+	"E501",  # Never enforce `E501` (line length violations)
+	"E402",  # Never enforce `E402` (import not at top of file)
+]
