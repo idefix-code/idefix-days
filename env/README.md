@@ -25,13 +25,13 @@ First, note that the compute nodes are shared between all of us during the works
 
 <details><summary>I want to play in the green team (Nvidia)</summary>
 If a reservation is available:
-  
+
 Tuesday:
 
   ```shell
 oarsub -t inner=619658 -l nodes=1/gpu=1,walltime=0:30:0 -p "gpumodel='A100'" --project idefix-23 -I
 ```
-  
+
 Wednesday:
 
 ```shell
@@ -73,7 +73,7 @@ Tuesday:
 ```shell
 oarsub -t inner=619621 -l nodes=1/gpu=1,walltime=0:30:0 -t amd --project idefix-23 -I
 ```
-  
+
 Wednesday:
 
 ```shell
