@@ -213,7 +213,7 @@ We see that the file we just created is currently *untracked*, meaning its evolu
 not followed by `git`. The output of `git status` also contains a helpful hint at what
 to do next to start tracking it:
 
-```
+```shell
 $ git add README.txt
 ```
 <details><summary> git status </summary>
@@ -231,7 +231,7 @@ Changes to be committed:
 
 We see that `README.txt` is now being *tracked* by the system, but it is not *committed* yet, meaning we haven't created an actual *version* (or *commit*, from now on) in the history. So let's do just that
 
-```
+```shell
 $ git commit -m "Add README.txt"
 ```
 
@@ -352,12 +352,12 @@ gitGraph:
 
 This can be done as a *relative* displacement
 
-```
+```shell
 $ git checkout HEAD~2
 ```
 
 Alternatively, if we know the hash of the exact commit we want to visit, we can use *absolute* displacement. For instance
-```
+```shell
 $ git checkout 956206c5db49848047ef45161ed9e457dcb5f9a8
 ```
 
@@ -366,12 +366,12 @@ $ git checkout 956206c5db49848047ef45161ed9e457dcb5f9a8
 
 
 To get back to our initial state (visit the *present*) of our `main` branch
-```
+```shell
 $ git checkout main
 ```
 
 To get back to the *previous* position in history, a convenience, akin to `cd -` is
-```
+```shell
 $ git checkout -
 ```
 
@@ -441,7 +441,7 @@ gitGraph:
 ```
 
 In order to sync up histories *from the remote to your local copy*, we'll use `git pull`
-```
+```shell
 $ git pull
 ```
 
@@ -502,7 +502,7 @@ It is best to keep each branch dedicated to a very specific task to avoid overla
 
 Again, `HEAD` indicates our current position on the history tree. It can only point to one branch at a time.
 Visualizing the current branch on the command line is done like so
-```
+```shell
 $ git branch
 * main
 feature
@@ -511,7 +511,7 @@ where the `*` char indicates the current position of `HEAD`.
 
 As you may have guessed, the natural way to *switch branch* is to use `git checkout`
 
-```
+```shell
 $ git checkout feature
 ```
 
@@ -671,15 +671,15 @@ In order to get some practice without polluting idefix's repo, here we'll work w
 mock project with none of the source code but all of the infrastructure: https://github.com/idefix-code/idefox
 
 ### Fork it
-Because you don't have commit-rights on the `idefix-code` repository, you'll need to
+Because you don't have commit-rights on the `idefix-code/idefox` repository, you'll need to
 *fork* it. This means creating a copy that *belongs to you*, which will allow you to
 create branches !
 
 ![fork](img/Screenshot-fork.png)
 
-⚠️⚠️⚠️
-Untick the following box
-⚠️⚠️⚠️
+⚠️⚠️⚠️ when you fork the *actual* idefix repository, you may need to untick the
+following box (if you mean to base your work on a future branch like v2.0) ⚠️⚠️⚠️
+
 ![fork box](img/Screenshot-copy_branches.png)
 
 ### Clone it
@@ -689,31 +689,37 @@ Untick the following box
 ![clone](img/Screenshot-clone.png)
 
 ```shell
-$ git clone git@github.com:<USER>/idefox.git -b v2.0
+$ git clone git@github.com:<USER>/idefox.git
+```
+
+While we're at it, let's take a moment to [setup `pre-commit`](https://pre-commit.com/#install).
+We'll explain what it is and what it does in a following section.
+
+```shell
+$ cd idefox
+$ pre-commit install
 ```
 
 ### Branch it
 
 ```shell
-$ cd idefox
-$ git branch mybranch
-$ git checkout mybranch
+$ git branch <mybranch>
+$ git checkout <mybranch>
 ```
 
 ```mermaid
-%%{init: {'gitGraph': {'mainBranchName': 'master'}}}%%
+%%{init: {'gitGraph': {'mainBranchName': 'master/mybranch'}}}%%
 gitGraph:
   commit
   commit
   commit
   commit
-  branch mybranch
 ```
 
 ### Patch it
 
 Edit the code with your favourite code editor, then commit changes to your branch
-```
+```shell
 $ git add -u
 $ git commit -m "description of the change"
 ```
@@ -731,7 +737,7 @@ gitGraph:
 ```
 ### Push it
 
-```
+```shell
 $ git push
 ```
 
