@@ -17,7 +17,7 @@
     + [Definitions](#definitions)
     + [Setting up your project on GitHub](#setting-up-your-project-on-github)
   * [Using branches](#using-branches)
-    + [Introdution to branches](#introdution-to-branches)
+    + [Introduction to branches](#introduction-to-branches)
     + [Creating a new branch](#creating-a-new-branch)
     + [Merging back](#merging-back)
 - [Practical development](#practical-development)
@@ -67,7 +67,7 @@ project like `idefix`.
 Mastering `git` goes well beyond the scope of the present document.
 In particular,  history rewriting (`git rebase`) and history inspection (`git bisect`)
 are considered *advanced*, and will not be covered here. They should not however be
-considered *esoteric*, and consistute very powerful tools for the initiated.
+considered *esoteric*, and constitute very powerful tools for the initiated.
 
 
 ## What is `git` ?
@@ -467,7 +467,7 @@ The solution to this problem is to use multiple branches, as we will see in the 
 >    In this section we will learn how to use history *branches*,
 >    which are a central and powerful concept at the heart of most development workflows.
 
-### Introdution to branches
+### Introduction to branches
 A branch can be thought of as an *alternative timeline* in which changes can be made without impacting the state of the `main` history.
 
 A branch may be used to develop a change (say a feature in your code, a section in your paper...), **in isolation**.

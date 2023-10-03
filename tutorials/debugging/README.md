@@ -121,7 +121,7 @@ make -j 8
 
 And this runs beaufiully, congrats!
 
-Now, let's run this on a GPU. First follow the procedure describe in the [environement tutorial](../../env/README.md) to connect to a compute node and set up your environement, then go to the problem2 directory, configure for GPU, compile and run...
+Now, let's run this on a GPU. First follow the procedure describe in the [environment tutorial](../../env/README.md) to connect to a compute node and set up your environment, then go to the problem2 directory, configure for GPU, compile and run...
 
 ...and?
 
@@ -148,7 +148,7 @@ To fix this, we need to force both the CPU and GPU to stay in sync. This leads t
 
 The easiest way to force CPU and GPU to stay in sync is to use the kernel logging module of [Kokkos Tools](https://github.com/kokkos/kokkos-tools). Luckily, we (the LOC) have already compiled a version of Kokkos tools on the machine you are running on, so you won't have to do it yourself (otherwise, just follow the documentation there).
 
-Kokkos tools are always enabled *at runtime* by setting the environement variable ``KOKKOS_TOOLS_LIBS`` to the path to the tool you want to use. Note that there is no need to recompile!
+Kokkos tools are always enabled *at runtime* by setting the environment variable ``KOKKOS_TOOLS_LIBS`` to the path to the tool you want to use. Note that there is no need to recompile!
 
 Here, we're going to use the Kernel logger. The kernel logger forces Kokkos to show which kernel is being launched, where it is, and when it finishes. This forces CPU and GPU to stay in sync by adding ``Kokkos::fence`` at the end of each ``idefix_for``
 
@@ -248,7 +248,7 @@ This kind of bug is very common and very hard to track down sometimes. Actually,
 
 ## Problem 4: a low performance bug.
 
-Let's move to problem 4, which is again a planet-disk interraction problem. This can be compiled and run *on your laptop* or on the bigfoot cluster, but let's focus for now on the GPU version on the bigfoot cluster (you can try to do the exercise on your laptop, but you will need to compile Kokkos tools first). First go to the right directory
+Let's move to problem 4, which is again a planet-disk interaction problem. This can be compiled and run *on your laptop* or on the bigfoot cluster, but let's focus for now on the GPU version on the bigfoot cluster (you can try to do the exercise on your laptop, but you will need to compile Kokkos tools first). First go to the right directory
 
 ```shell
 cd idefix-days/tutorials/debugging/problem4
