@@ -1,2 +1,2 @@
-nonos>=0.13.1
+nonos>=0.14.0
 jupyterlab>=4.0.2
