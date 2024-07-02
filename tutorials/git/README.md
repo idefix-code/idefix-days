@@ -458,7 +458,7 @@ gitGraph:
 ```
 
 
-So _how_ are your supposed to add commits to the main branch since we just forbidded anyone to push *directly* there ?
+So _how_ are your supposed to add commits to the main branch since we just forbidden anyone to push *directly* there ?
 The solution to this problem is to use multiple branches, as we will see in the next section.
 
 
