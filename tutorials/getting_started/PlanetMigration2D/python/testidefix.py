@@ -61,8 +61,8 @@ if plot:
     plt.show()
 
 diff_torque = np.max(np.abs(tq_tot - tq_tot_ref))
-print("diff_torque=%e" % diff_torque)
-print("Error_dist=%e" % error_d)
+print(f"diff_torque={diff_torque:e}")
+print(f"Error_dist={error_d:e}")
 # print("Error_torque=%e"%error_t)
 # if error_d<5.0e-2 and error_t<5.0e-2 and error_rho<5.0e-2:
 if error_d < 5.0e-2 and diff_torque < 1.0e-15:
