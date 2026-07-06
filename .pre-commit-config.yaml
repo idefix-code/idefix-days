@@ -20,7 +20,7 @@ repos:
         additional_dependencies: [black==25.1.0]
 
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.15.9
+  rev: v0.15.20
   hooks:
   - id: ruff-format
   - id: ruff-check
@@ -29,7 +29,7 @@ repos:
       - --fix
 
 - repo: https://github.com/la-niche/inifix-pre-commit.git
-  rev: v1.0.0
+  rev: v1.0.1
   hooks:
     - id: inifix-format
 
